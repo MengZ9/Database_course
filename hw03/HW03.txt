@@ -1,0 +1,156 @@
+
+\qecho Meng Zhang
+\qecho
+\qecho Homework 03
+\qecho #1
+\qecho
+
+SELECT Meeting.id AS id, X.attendees AS butsinseat, COALESCE(capacity, X.attendees) AS coalesce, creatorid
+FROM Room
+	JOIN Meeting ON (meeting.roomid = Room.ID)
+	JOIN (
+SELECT DISTINCT Meeting.Id, COUNT (*) attendees
+FROM Employee
+JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+GROUP BY Meeting.ID
+ORDER BY Meeting.id) AS X ON (X.id = Meeting.id)
+GROUP BY Meeting.ID, x.attendees, capacity
+ORDER by Meeting.ID;
+
+
+\qecho
+\qecho #2
+
+SELECT name, SUM(attendees) AS attendees, SUM(capacity) AS capacity, SUM(capacity) - SUM(attendees) AS availseats
+FROM(
+	SELECT DISTINCT Meeting.creatorid, Meeting.id, COUNT(*) AS attendees, 
+	COALESCE(capacity,COUNT(*)) AS capacity
+	FROM Employee
+		JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+		JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+		JOIN Room ON (Room.ID = Meeting.roomid)
+	GROUP BY Meeting.creatorid, capacity,  Meeting.id) AS X
+	JOIN Employee ON (Employee.ID = X.creatorid)
+GROUP BY x.creatorid, name
+ORDER BY X.creatorid, availseats;
+
+
+
+\qecho
+\qecho #3
+
+SELECT name, COUNT (Meeting.ID) * 0.75 AS maxmeetings
+FROM Employee
+	JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+	JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+GROUP BY Employee.ID
+ORDER BY maxmeetings DESC
+LIMIT 1;
+
+\qecho
+\qecho #4
+
+SELECT name, COUNT (*) AS numMeetings
+FROM Employee
+	JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+	JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+GROUP BY Employee.ID
+ORDER BY numMeetings
+OFFSET (SELECT CEIL(COUNT(*) *0.75)
+FROM Employee);
+
+
+\qecho
+\qecho #5
+ 
+SELECT (utilRoom / totalRoom :: real * 100)::integer AS "Util in %"
+FROM (
+	SELECT COUNT(*) AS utilRoom
+	FROM Meeting
+	WHERE starttime <'2018-03-04 10:00:00' AND starttime + duration > '2018-03-04 10:00:00') AS Table1,
+(SELECT COUNT(*) AS totalRoom FROM ROOM) AS Table2;
+
+
+\qecho
+\qecho #6
+
+SELECT PhoneType.name AS category, COUNT(*) AS num_employees
+FROM (
+	SELECT PhoneType.name AS category, COUNT (*) AS num
+	FROM Employee
+		JOIN Phone ON (Employee.ID = Phone.employeeID)
+		JOIN PhoneType ON (Phone.phoneTypeID = PhoneType.ID)
+	GROUP BY Employee.ID, PhoneType.name) AS X
+	JOIN PhoneType ON (X.category = PhoneType.name)
+GROUP BY PhoneType.ID, PhoneType.name
+ORDER BY PhoneType.name;
+
+\qecho
+\qecho #7
+
+
+SELECT name AS category, COUNT(*) AS numlistings
+FROM Phone
+	JOIN PhoneType ON (Phone.phoneTypeID = PhoneType.ID)
+GROUP BY Phone.PhonetypeID, name
+ORDER BY name;
+
+
+\qecho
+\qecho #8
+
+SELECT meeting.ID AS meetingID, purpose, COUNT(*) cellPhones
+FROM Phone
+	JOIN Employee ON (Employee.ID = Phone.employeeID)
+	JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+	JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+	JOIN Room ON (Room.ID = Meeting.roomid)
+WHERE PhoneTypeid = 'C' AND Room.building = 'B'
+GROUP BY Meeting.ID, purpose
+ORDER BY Meeting.ID;
+
+\qecho
+\qecho #9
+
+SELECT ROUND(AVG(X.cellphones), 2) AS avg_phones
+FROM (
+	SELECT COUNT(*) cellPhones
+	FROM Phone
+		JOIN Employee ON (Employee.ID = Phone.employeeID)
+		JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+		JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+		JOIN Room ON (Room.ID = Meeting.roomid)
+	WHERE PhoneTypeid = 'C' AND Room.building = 'B'
+	GROUP BY Meeting.ID
+) AS X;
+
+\qecho
+\qecho #10
+
+SELECT purpose, COUNT(*) AS num_Phones, 
+(SELECT ROUND(AVG(X.cellphones), 2) AS avg_phones
+	FROM (
+	SELECT COUNT(*) cellPhones
+	FROM Phone
+		JOIN Employee ON (Employee.ID = Phone.employeeID)
+		JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+		JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+		JOIN Room ON (Room.ID = Meeting.roomid)
+	WHERE PhoneTypeid = 'C' AND Room.building = 'A'
+	GROUP BY Meeting.ID
+) AS X)
+FROM Phone
+	JOIN Employee ON (Employee.ID = Phone.employeeID)
+	JOIN Attendees ON (Employee.ID = Attendees.employeeid)
+	JOIN Meeting ON (Attendees.meetingid = Meeting.ID)
+	JOIN Room ON (Room.ID = Meeting.roomid)
+WHERE PhoneTypeid = 'C' AND Room.building = 'A'
+GROUP BY Meeting.purpose, Meeting.id
+ORDER BY Meeting.purpose, Meeting.id;
+
+
+
+
+
+\qecho

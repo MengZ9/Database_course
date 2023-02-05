@@ -1,0 +1,115 @@
+Meng Zhang
+
+Homework 03
+#1
+
+ id  | butsinseat | coalesce | creatorid 
+-----+------------+----------+-----------
+ 101 |          6 |       10 |        14
+ 102 |          6 |       10 |        14
+ 103 |          8 |       10 |        14
+ 104 |          6 |       10 |        14
+ 105 |          6 |       20 |         3
+ 106 |          7 |       20 |         3
+ 107 |          3 |        5 |         3
+ 108 |          4 |        4 |         6
+ 109 |          6 |        6 |         5
+ 110 |         14 |       30 |        11
+ 111 |          6 |       30 |        14
+ 112 |          6 |       20 |        14
+ 113 |          7 |       20 |        14
+ 114 |          6 |       20 |        14
+ 115 |          7 |       20 |         3
+ 116 |          6 |        5 |         5
+(16 rows)
+
+
+#2
+  name   | attendees | capacity | availseats 
+---------+-----------+----------+------------
+ Winston |        23 |       65 |         42
+ Dan     |        12 |       11 |         -1
+ Alice   |         4 |        4 |          0
+ Jack    |        14 |       30 |         16
+ Alice   |        51 |      130 |         79
+(5 rows)
+
+
+#3
+ name | maxmeetings 
+------+-------------
+ Dave |        8.25
+(1 row)
+
+
+#4
+  name  | nummeetings 
+--------+-------------
+ Albert |           9
+ Jack   |          10
+ Dave   |          11
+(3 rows)
+
+
+#5
+ Util in % 
+-----------
+        22
+(1 row)
+
+
+#6
+ category | num_employees 
+----------+---------------
+ Cell     |            10
+ Home     |             7
+ Pager    |             3
+ Work     |            15
+(4 rows)
+
+
+#7
+ category | numlistings 
+----------+-------------
+ Cell     |          10
+ Home     |           8
+ Pager    |           3
+ Work     |          15
+(4 rows)
+
+
+#8
+ meetingid |     purpose     | cellphones 
+-----------+-----------------+------------
+       108 | DB Issues       |          3
+       109 | Post Mortem     |          6
+       110 | HR Presentation |          9
+       112 | Lunch           |          3
+       113 | Lunch           |          4
+       114 | Lunch           |          3
+       115 | PlanningLunch   |          5
+(7 rows)
+
+
+#9
+ avg_phones 
+------------
+       4.71
+(1 row)
+
+
+#10
+   purpose   | num_phones | avg_phones 
+-------------+------------+------------
+ Post Mortem |          6 |       4.89
+ Sales       |          1 |       4.89
+ Staff       |          6 |       4.89
+ Staff       |          6 |       4.89
+ Staff       |          7 |       4.89
+ Staff       |          6 |       4.89
+ Staff       |          4 |       4.89
+ Staff       |          4 |       4.89
+ Team Build  |          4 |       4.89
+(9 rows)
+
+
